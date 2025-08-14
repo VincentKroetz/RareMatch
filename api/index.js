@@ -1,133 +1,130 @@
 // Vercel Serverless Function für RareMatch API
-const express = require('express');
-const cors = require('cors');
 
-const app = express();
+// In-Memory Storage
+const certificates = new Map();
 
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
-// Storage Interface (simplified for serverless)
-class MemoryStorage {
-  constructor() {
-    this.certificates = new Map();
-  }
-
-  async saveCertificate(certificate) {
-    this.certificates.set(certificate.id, certificate);
-    return certificate;
-  }
-
-  async getCertificate(id) {
-    return this.certificates.get(id) || null;
-  }
+// Helper Functions
+function generateCertificateId() {
+  return Math.random().toString(36).substring(2, 15);
 }
 
-const storage = new MemoryStorage();
+function calculateRarity(eyeColor, hairColor, physicalAbilities) {
+  const baseRarity = 1.0;
+  const abilityMultiplier = (physicalAbilities?.length || 0) * 0.2;
+  return Math.max(0.01, baseRarity - abilityMultiplier);
+}
 
-// API Routes
-app.post('/api/certificates/generate', async (req, res) => {
-  try {
-    const { firstName, lastName, eyeColor, hairColor, facialFeatures, physicalAbilities } = req.body;
-    
-    // Generate certificate ID
-    const certificateId = Math.random().toString(36).substring(2, 15);
-    
-    // Calculate rarity (simplified)
-    const baseRarity = 0.5;
-    const abilityMultiplier = physicalAbilities?.length * 0.1 || 0;
-    const rarityPercentage = Math.max(0.01, baseRarity - abilityMultiplier);
-    
-    const certificate = {
-      id: certificateId,
-      firstName,
-      lastName,
-      eyeColor,
-      hairColor,
-      facialFeatures: facialFeatures || [],
-      physicalAbilities: physicalAbilities || [],
-      rarityPercentage,
-      rarityRatio: `1 in ${Math.round(100 / rarityPercentage)}`,
-      createdAt: new Date().toISOString(),
-      certificateUrl: `https://via.placeholder.com/800x600/6366f1/ffffff?text=${firstName}+${lastName}+Certificate`,
-      posterUrl: `https://via.placeholder.com/600x800/ec4899/ffffff?text=${firstName}+${lastName}+Poster`
-    };
+function setCorsHeaders(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+}
 
-    await storage.saveCertificate(certificate);
-    
-    res.json({
-      success: true,
-      certificate,
-      message: "Certificate generated successfully!"
-    });
-  } catch (error) {
-    console.error('Certificate generation error:', error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to generate certificate"
-    });
+// Main Handler
+export default function handler(req, res) {
+  setCorsHeaders(res);
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
-});
 
-app.post('/api/rarity/calculate', async (req, res) => {
-  try {
-    const { eyeColor, hairColor, physicalAbilities } = req.body;
-    
-    if (!eyeColor || !hairColor) {
-      return res.status(400).json({
-        error: "Eye color and hair color are required"
+  const { url, method } = req;
+
+  // Route to certificate generation
+  if (url.includes('/api/certificates/generate') && method === 'POST') {
+    try {
+      const { firstName, lastName, eyeColor, hairColor, facialFeatures, physicalAbilities } = req.body;
+      
+      const certificateId = generateCertificateId();
+      const rarityPercentage = calculateRarity(eyeColor, hairColor, physicalAbilities);
+      
+      const certificate = {
+        id: certificateId,
+        firstName,
+        lastName,
+        eyeColor,
+        hairColor,
+        facialFeatures: facialFeatures || [],
+        physicalAbilities: physicalAbilities || [],
+        rarityPercentage,
+        rarityRatio: `1 in ${Math.round(100 / rarityPercentage)}`,
+        createdAt: new Date().toISOString(),
+        certificateUrl: `https://via.placeholder.com/800x600/6366f1/ffffff?text=${firstName}+${lastName}+Certificate`,
+        posterUrl: `https://via.placeholder.com/600x800/ec4899/ffffff?text=${firstName}+${lastName}+Poster`
+      };
+
+      certificates.set(certificateId, certificate);
+      
+      return res.json({
+        success: true,
+        certificate,
+        message: "Certificate generated successfully!"
       });
-    }
-    
-    const baseRarity = 1.0;
-    const abilityMultiplier = physicalAbilities?.length * 0.2 || 0;
-    const rarityPercentage = Math.max(0.01, baseRarity - abilityMultiplier);
-    
-    res.json({
-      rarityPercentage,
-      rarityRatio: `1 in ${Math.round(100 / rarityPercentage)}`,
-      description: rarityPercentage < 0.1 ? "Extremely Rare" : 
-                   rarityPercentage < 0.5 ? "Very Rare" : 
-                   rarityPercentage < 1.0 ? "Rare" : "Uncommon"
-    });
-  } catch (error) {
-    console.error('Rarity calculation error:', error);
-    res.status(500).json({
-      error: "Failed to calculate rarity"
-    });
-  }
-});
-
-app.get('/api/certificates/:id', async (req, res) => {
-  try {
-    const certificate = await storage.getCertificate(req.params.id);
-    
-    if (!certificate) {
-      return res.status(404).json({
+    } catch (error) {
+      return res.status(500).json({
         success: false,
-        message: "Certificate not found"
+        message: "Failed to generate certificate"
       });
     }
-    
-    res.json({
-      success: true,
-      certificate
-    });
-  } catch (error) {
-    console.error('Certificate retrieval error:', error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to retrieve certificate"
-    });
   }
-});
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+  // Route to rarity calculation
+  if (url.includes('/api/rarity/calculate') && method === 'POST') {
+    try {
+      const { eyeColor, hairColor, physicalAbilities } = req.body;
+      
+      if (!eyeColor || !hairColor) {
+        return res.status(400).json({
+          error: "Eye color and hair color are required"
+        });
+      }
+      
+      const rarityPercentage = calculateRarity(eyeColor, hairColor, physicalAbilities);
+      
+      return res.json({
+        rarityPercentage,
+        rarityRatio: `1 in ${Math.round(100 / rarityPercentage)}`,
+        description: rarityPercentage < 0.1 ? "Extremely Rare" : 
+                     rarityPercentage < 0.5 ? "Very Rare" : 
+                     rarityPercentage < 1.0 ? "Rare" : "Uncommon"
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: "Failed to calculate rarity"
+      });
+    }
+  }
 
-// Export for Vercel
-module.exports = app;
+  // Route to get certificate by ID
+  if (url.includes('/api/certificates/') && method === 'GET') {
+    try {
+      const id = url.split('/api/certificates/')[1];
+      const certificate = certificates.get(id);
+      
+      if (!certificate) {
+        return res.status(404).json({
+          success: false,
+          message: "Certificate not found"
+        });
+      }
+      
+      return res.json({
+        success: true,
+        certificate
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to retrieve certificate"
+      });
+    }
+  }
+
+  // Health check
+  if (url.includes('/api/health') && method === 'GET') {
+    return res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  }
+
+  // Default response
+  return res.status(404).json({ error: 'Route not found' });
+}
