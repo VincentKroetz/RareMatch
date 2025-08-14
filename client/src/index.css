@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(222 84% 4.9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222 84% 4.9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222 84% 4.9%);
+  --primary: hsl(274 67% 67%); /* Logo Purple */
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(45 95% 68%); /* Logo Yellow */
+  --secondary-foreground: hsl(222 84% 4.9%);
+  --muted: hsl(180 25% 94%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --accent: hsl(174 72% 56%); /* Logo Turquoise */
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(174 25% 85%);
+  --input: hsl(174 25% 85%);
+  --ring: hsl(274 67% 67%);
+  --chart-1: hsl(274 67% 67%); /* Logo Purple */
+  --chart-2: hsl(329 86% 70%); /* Logo Pink */
+  --chart-3: hsl(45 95% 68%); /* Logo Yellow */
+  --chart-4: hsl(217 91% 60%); /* Logo Blue */
+  --chart-5: hsl(174 72% 56%); /* Logo Turquoise */
+  --radius: 0.75rem;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: ui-monospace, monospace;
+  
+  /* Logo-specific colors */
+  --logo-purple: hsl(274 67% 67%);
+  --logo-pink: hsl(329 86% 70%);
+  --logo-yellow: hsl(45 95% 68%);
+  --logo-blue: hsl(217 91% 60%);
+  --logo-turquoise: hsl(174 72% 56%);
+  --logo-navy: hsl(222 84% 20%);
+}
+
+.dark {
+  --background: hsl(222 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(239 84% 67%);
+  --primary-foreground: hsl(222 84% 4.9%);
+  --secondary: hsl(217 32% 17%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217 32% 17%);
+  --muted-foreground: hsl(215 20% 65%);
+  --accent: hsl(217 32% 17%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62% 30%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217 32% 17%);
+  --input: hsl(217 32% 17%);
+  --ring: hsl(239 84% 67%);
+  --chart-1: hsl(239 84% 67%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .bg-cert-gold {
+    background-color: hsl(43 74% 66%);
+  }
+  
+  .text-cert-gold {
+    color: hsl(43 74% 66%);
+  }
+  
+  .border-cert-gold {
+    border-color: hsl(43 74% 66%);
+  }
+  
+  .bg-cert-blue {
+    background-color: hsl(239 84% 67%);
+  }
+  
+  .text-cert-blue {
+    color: hsl(239 84% 67%);
+  }
+  
+  .border-cert-blue {
+    border-color: hsl(239 84% 67%);
+  }
+}
