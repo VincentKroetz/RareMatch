@@ -16,4 +16,9 @@ export default defineConfig({
     outDir: path.resolve(process.cwd(), "dist"),
     emptyOutDir: true,
   },
+  css: {
+    postcss: {
+      plugins: [],
+    },
+  },
 });
