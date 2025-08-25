@@ -1,5 +1,3 @@
-import logoImage from "@assets/8DgQKgN0SuBFAAAAAASUVORK5CYII=_1755184318408.png";
-
 interface LogoProps {
   size?: number;
   className?: string;
@@ -7,12 +5,13 @@ interface LogoProps {
 
 export function Logo({ size = 40, className = "" }: LogoProps) {
   return (
-    <img 
-      src={logoImage}
-      alt="RareMatch Logo"
-      width={size}
-      height={size}
-      className={className}
-    />
+    <div 
+      className={`font-bold text-primary flex items-center ${className}`}
+      style={{ fontSize: size * 0.6 }}
+    >
+      <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        RareMatch
+      </span>
+    </div>
   );
 }
