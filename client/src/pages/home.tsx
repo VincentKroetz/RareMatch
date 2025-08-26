@@ -67,13 +67,14 @@ export default function Home() {
       <header className="bg-white/90 backdrop-blur-sm shadow-lg border-b border-purple-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <header className="bg-white shadow-sm border-b border-gray-200">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <Logo size={100} />
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 bg-clip-text text-transparent">RareMatch</h1>
+              <div className="flex items-center space-x-3">
+                <Logo size={28} />
                 <p className="text-gray-600 text-sm">Discover how unique you really are</p>
-              </div>
-            </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 bg-clip-text text-transparent">RareMatch</h1>
+            <p className="text-gray-600 text-xs">Discover how unique you really are</p>
             <div className="hidden sm:flex items-center space-x-2 text-sm text-purple-700 bg-purple-100 px-4 py-2 rounded-full">
               <i className="fas fa-users text-purple-600"></i>
               <span>Professional rarity analysis</span>
