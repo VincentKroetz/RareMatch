@@ -64,7 +64,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
+             {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -81,9 +82,8 @@ export default function Home() {
           </div>
         </div>
       </header>
-      </header>
 
-      {/* Hero Section */}
+      {/* Hero Section */}    
       <section className="bg-gradient-to-br from-purple-600 via-pink-500 to-blue-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">Discover Your Rarity</h2>
