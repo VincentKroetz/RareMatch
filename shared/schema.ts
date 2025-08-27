@@ -37,7 +37,7 @@ export type Certificate = typeof certificates.$inferSelect;
 export const generateCertificateRequestSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  faceImageBase64: z.string().min(1, "Face photo is required"),
+  faceImageBase64: z.string().default(""),
   eyeColor: z.enum(["brown", "blue", "green", "hazel"]).optional(),
   hairColor: z.enum(["black", "brown", "blonde", "red"]).optional(),
   facialFeatures: z.array(z.enum([
