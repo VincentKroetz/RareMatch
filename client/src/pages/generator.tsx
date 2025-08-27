@@ -68,7 +68,7 @@ export default function Generator() {
           <div className="flex items-center justify-between">
             <Link href="/">
               <div className="flex items-center space-x-4 cursor-pointer">
-                <Logo size={80} />
+                <Logo size={100} />
                 <div>
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 bg-clip-text text-transparent">RareMatch</h1>
                   <p className="text-gray-600 text-sm">Discover how unique you really are</p>
