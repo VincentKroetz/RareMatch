@@ -12,7 +12,9 @@ def generate_certificate_and_poster(data):
         # Parse input data
         certificate_data = json.loads(data)
         
-        output_dir = certificate_data['outputDir']
+        
+# Ensure output directory exists
+os.makedirs(output_dir, exist_ok=True)
         cert_id = certificate_data['id']
         first_name = certificate_data['firstName']
         last_name = certificate_data['lastName']
